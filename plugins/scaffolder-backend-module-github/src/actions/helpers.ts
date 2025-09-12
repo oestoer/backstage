@@ -34,6 +34,7 @@ export async function createGithubRepoWithCollaboratorsAndTopics(
   client: Octokit,
   repo: string,
   owner: string,
+  autoInit: boolean | undefined,
   repoVisibility: 'private' | 'internal' | 'public' | undefined,
   description: string | undefined,
   homepage: string | undefined,
@@ -96,6 +97,7 @@ export async function createGithubRepoWithCollaboratorsAndTopics(
           private: repoVisibility === 'private',
           // @ts-ignore https://github.com/octokit/types.ts/issues/522
           visibility: repoVisibility,
+          auto_init: autoInit,
           description: description,
           delete_branch_on_merge: deleteBranchOnMerge,
           allow_merge_commit: allowMergeCommit,
@@ -115,6 +117,7 @@ export async function createGithubRepoWithCollaboratorsAndTopics(
       : client.rest.repos.createForAuthenticatedUser({
           name: repo,
           private: repoVisibility === 'private',
+          auto_init: autoInit,
           description: description,
           delete_branch_on_merge: deleteBranchOnMerge,
           allow_merge_commit: allowMergeCommit,

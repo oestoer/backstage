@@ -100,6 +100,14 @@ const repoVisibility = (z: typeof zod) =>
     })
     .optional();
 
+const autoInit = (z: typeof zod) =>
+  z
+    .boolean({
+      description:
+        'If true, initialize the repository with a minimal README. This will create an initial commit on GitHub (useful for orgs that require signed commits).',
+    })
+    .optional();
+
 const deleteBranchOnMerge = (z: typeof zod) =>
   z
     .boolean({
@@ -441,6 +449,7 @@ export {
   oidcCustomization,
   customProperties,
   subscribe,
+  autoInit,
   requiredApprovingReviewCount,
   restrictions,
   requiredCommitSigning,
