@@ -481,6 +481,48 @@ describe('github:repo:create', () => {
     });
   });
 
+  it('should pass auto_init when autoInit is true for org repos', async () => {
+    mockOctokit.rest.users.getByUsername.mockResolvedValue({
+      data: { type: 'Organization' },
+    });
+
+    mockOctokit.rest.repos.createInOrg.mockResolvedValue({ data: {} });
+
+    await action.handler({
+      ...mockContext,
+      input: {
+        ...mockContext.input,
+        autoInit: true,
+      },
+    });
+
+    expect(mockOctokit.rest.repos.createInOrg).toHaveBeenCalledWith(
+      expect.objectContaining({ auto_init: true }),
+    );
+  });
+
+  it('should pass auto_init when autoInit is true for user repos', async () => {
+    mockOctokit.rest.users.getByUsername.mockResolvedValue({
+      data: { type: 'User' },
+    });
+
+    mockOctokit.rest.repos.createForAuthenticatedUser.mockResolvedValue({
+      data: {},
+    });
+
+    await action.handler({
+      ...mockContext,
+      input: {
+        ...mockContext.input,
+        autoInit: true,
+      },
+    });
+
+    expect(
+      mockOctokit.rest.repos.createForAuthenticatedUser,
+    ).toHaveBeenCalledWith(expect.objectContaining({ auto_init: true }));
+  });
+
   it('should add access for the team when it starts with the owner', async () => {
     mockOctokit.rest.users.getByUsername.mockResolvedValue({
       data: { type: 'User' },

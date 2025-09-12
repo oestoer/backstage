@@ -1006,4 +1006,19 @@ export const examples: TemplateExample[] = [
       ],
     }),
   },
+  {
+    description: 'Initialize repository with a README using autoInit.',
+    example: yaml.stringify({
+      steps: [
+        {
+          action: 'github:repo:create',
+          name: 'Create a new GitHub repository and auto-initialize',
+          input: {
+            repoUrl: 'github.com?repo=repo&owner=owner',
+            autoInit: true,
+          },
+        },
+      ],
+    }),
+  },
 ];

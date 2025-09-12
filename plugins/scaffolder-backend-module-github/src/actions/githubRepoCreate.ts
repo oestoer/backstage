@@ -108,7 +108,7 @@ export function createGithubRepoCreateAction(options: {
         hasWiki = undefined,
         hasIssues = undefined,
         topics,
-        autoInit = false,
+        autoInit = undefined,
         repoVariables,
         secrets,
         oidcCustomization,

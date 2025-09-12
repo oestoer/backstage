@@ -89,49 +89,56 @@ export async function createGithubRepoWithCollaboratorsAndTopics(
     await validateAccessTeam(client, access);
   }
 
+  const orgParams: any = {
+    name: repo,
+    org: owner,
+    private: repoVisibility === 'private',
+    // @ts-ignore https://github.com/octokit/types.ts/issues/522
+    visibility: repoVisibility,
+    description: description,
+    delete_branch_on_merge: deleteBranchOnMerge,
+    allow_merge_commit: allowMergeCommit,
+    allow_squash_merge: allowSquashMerge,
+    squash_merge_commit_title: squashMergeCommitTitle,
+    squash_merge_commit_message: squashMergeCommitMessage,
+    allow_rebase_merge: allowRebaseMerge,
+    allow_auto_merge: allowAutoMerge,
+    allow_update_branch: allowUpdateBranch,
+    homepage: homepage,
+    has_projects: hasProjects,
+    has_wiki: hasWiki,
+    has_issues: hasIssues,
+    // Custom properties only available on org repos
+    custom_properties: customProperties,
+  };
+
+  const userParams: any = {
+    name: repo,
+    private: repoVisibility === 'private',
+    description: description,
+    delete_branch_on_merge: deleteBranchOnMerge,
+    allow_merge_commit: allowMergeCommit,
+    allow_squash_merge: allowSquashMerge,
+    squash_merge_commit_title: squashMergeCommitTitle,
+    squash_merge_commit_message: squashMergeCommitMessage,
+    allow_rebase_merge: allowRebaseMerge,
+    allow_auto_merge: allowAutoMerge,
+    allow_update_branch: allowUpdateBranch,
+    homepage: homepage,
+    has_projects: hasProjects,
+    has_wiki: hasWiki,
+    has_issues: hasIssues,
+  };
+
+  if (autoInit !== undefined) {
+    orgParams.auto_init = autoInit;
+    userParams.auto_init = autoInit;
+  }
+
   const repoCreationPromise =
     user.data.type === 'Organization'
-      ? client.rest.repos.createInOrg({
-          name: repo,
-          org: owner,
-          private: repoVisibility === 'private',
-          // @ts-ignore https://github.com/octokit/types.ts/issues/522
-          visibility: repoVisibility,
-          auto_init: autoInit,
-          description: description,
-          delete_branch_on_merge: deleteBranchOnMerge,
-          allow_merge_commit: allowMergeCommit,
-          allow_squash_merge: allowSquashMerge,
-          squash_merge_commit_title: squashMergeCommitTitle,
-          squash_merge_commit_message: squashMergeCommitMessage,
-          allow_rebase_merge: allowRebaseMerge,
-          allow_auto_merge: allowAutoMerge,
-          allow_update_branch: allowUpdateBranch,
-          homepage: homepage,
-          has_projects: hasProjects,
-          has_wiki: hasWiki,
-          has_issues: hasIssues,
-          // Custom properties only available on org repos
-          custom_properties: customProperties,
-        })
-      : client.rest.repos.createForAuthenticatedUser({
-          name: repo,
-          private: repoVisibility === 'private',
-          auto_init: autoInit,
-          description: description,
-          delete_branch_on_merge: deleteBranchOnMerge,
-          allow_merge_commit: allowMergeCommit,
-          allow_squash_merge: allowSquashMerge,
-          squash_merge_commit_title: squashMergeCommitTitle,
-          squash_merge_commit_message: squashMergeCommitMessage,
-          allow_rebase_merge: allowRebaseMerge,
-          allow_auto_merge: allowAutoMerge,
-          allow_update_branch: allowUpdateBranch,
-          homepage: homepage,
-          has_projects: hasProjects,
-          has_wiki: hasWiki,
-          has_issues: hasIssues,
-        });
+      ? client.rest.repos.createInOrg(orgParams)
+      : client.rest.repos.createForAuthenticatedUser(userParams);
 
   let newRepo;
 

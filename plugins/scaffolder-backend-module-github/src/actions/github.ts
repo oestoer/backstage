@@ -97,6 +97,7 @@ export function createPublishGithubAction(options: {
         requiredLinearHistory: inputProps.requiredLinearHistory,
         customProperties: inputProps.customProperties,
         subscribe: inputProps.subscribe,
+        autoInit: inputProps.autoInit,
       },
       output: {
         remoteUrl: outputProps.remoteUrl,
@@ -142,6 +143,7 @@ export function createPublishGithubAction(options: {
         repoVariables,
         secrets,
         oidcCustomization,
+        autoInit = undefined,
         token: providedToken,
         customProperties,
         subscribe = false,
@@ -175,6 +177,7 @@ export function createPublishGithubAction(options: {
             client,
             repo,
             owner,
+            autoInit,
             repoVisibility,
             description,
             homepage,
